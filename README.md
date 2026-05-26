@@ -7,7 +7,7 @@ Built as an extension of [Zeus Threat Intelligence](https://code-9.io/zeus.php) 
 ### Install
 
 Windows (Run in Powershell):
-``irm https://raw.githubusercontent.com/quantumcore/kev_monitor/refs/heads/main/install_windows.ps1 | iex``
+``iwr https://github.com/quantumcore/kev_monitor/raw/refs/heads/main/install_windows.ps1 | iex``
 
 Linux 
 ``curl -fsSL https://raw.githubusercontent.com/quantumcore/kev_monitor/refs/heads/main/install_linux.sh | sudo bash``
