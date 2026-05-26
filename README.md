@@ -46,7 +46,6 @@ KEV_URL    = https://www.cisa.gov/sites/default/files/feeds/known_exploited_vuln
 |---|---|
 | Windows 10/11 | PowerShell + `Windows.UI.Notifications` WinRT API |
 | Linux | `notify-send` (install `libnotify-bin` if missing) |
-| macOS | `osascript` display notification |
 
 > **Note on Linux services:** `notify-send` requires a running D-Bus session (i.e. a logged-in desktop user). When running as a headless `systemd` service the notification will silently fail; the report and DB entry are still written correctly.
 
