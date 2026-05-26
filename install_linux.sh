@@ -47,9 +47,9 @@ fi
 
 ARCH=$(uname -m)
 case "$ARCH" in
-    x86_64)  ASSET_PATTERN="kev_monitor*linux*x86_64*"  ;;
-    aarch64) ASSET_PATTERN="kev_monitor*linux*aarch64*" ;;
-    armv7l)  ASSET_PATTERN="kev_monitor*linux*armv7*"   ;;
+    x86_64)  ASSET_PATTERN="kev_monitor-linux-x86_64"  ;;
+    aarch64) ASSET_PATTERN="kev_monitor-linux-aarch64" ;;
+    armv7l)  ASSET_PATTERN="kev_monitor-linux-armv7"   ;;
     *) fail "Unsupported architecture: $ARCH" ;;
 esac
 
@@ -72,15 +72,18 @@ VERSION=$(echo "$RELEASE_JSON" | grep '"tag_name"' | head -1 | sed 's/.*"tag_nam
 ok "Latest release: $VERSION"
 
 # Extract download URL for the binary asset
-BINARY_URL=$(echo "$RELEASE_JSON" | grep '"browser_download_url"' |
-             grep -i "$ASSET_PATTERN" | head -1 |
-             sed 's/.*"browser_download_url": *"\([^"]*\)".*/\1/')
-[[ -n "$BINARY_URL" ]] || fail "No asset matching '$ASSET_PATTERN' found in release $VERSION."
+# grep -o + || true prevents set -e from firing on no match
+BINARY_URL=$(echo "$RELEASE_JSON" \
+    | grep -o '"browser_download_url":"[^"]*'"$ASSET_PATTERN"'[^"]*"' \
+    | grep -o 'https://[^"]*' \
+    | head -1 || true)
+[[ -n "$BINARY_URL" ]] || fail "No asset matching '$ASSET_PATTERN' found in release $VERSION. Ensure the binary is attached to the release."
 
 # Optional settings.ini asset
-CONFIG_URL=$(echo "$RELEASE_JSON" | grep '"browser_download_url"' |
-             grep '"settings\.ini"' | head -1 |
-             sed 's/.*"browser_download_url": *"\([^"]*\)".*/\1/' || true)
+CONFIG_URL=$(echo "$RELEASE_JSON" \
+    | grep -o '"browser_download_url":"[^"]*settings\.ini[^"]*"' \
+    | grep -o 'https://[^"]*' \
+    | head -1 || true)
 
 # ── Download ──────────────────────────────────────────────────────────────────
 
