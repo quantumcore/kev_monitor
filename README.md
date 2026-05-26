@@ -2,6 +2,16 @@
 
 A lightweight background service written in Rust that watches the [CISA Known Exploited Vulnerabilities (KEV) catalog](https://www.cisa.gov/known-exploited-vulnerabilities-catalog) for changes, writes a Markdown report of new entries, and sends a desktop toast notification.
 
+Built as an extension of [Zeus Threat Intelligence](https://code-9.io/zeus.php) pipeline for Automated KEV testing against a software inventory, refactored into a standalone portable utility.
+
+### Install
+
+Windows (Run in Powershell):
+``irm https://raw.githubusercontent.com/quantumcore/kev_monitor/refs/heads/main/install_windows.ps1 | iex``
+
+Linux 
+``curl -fsSL https://raw.githubusercontent.com/quantumcore/kev_monitor/refs/heads/main/install_linux.sh | sudo bash``
+
 ---
 
 ## Features
