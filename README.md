@@ -8,10 +8,12 @@ Built as an extension of [Zeus Threat Intelligence](https://code-9.io/zeus.php) 
 ![img2](https://github.com/quantumcore/kev_monitor/blob/main/report.png?raw=true)
 ### Install
 
-Windows (Run in Powershell):
+- Windows (Run in Powershell):
+Installs under C:\kev_monitor
 ``iwr https://github.com/quantumcore/kev_monitor/raw/refs/heads/main/install_windows.ps1 | iex``
 
-Linux 
+- Linux
+Installs under /opt/kev_monitor
 ``curl -fsSL https://raw.githubusercontent.com/quantumcore/kev_monitor/refs/heads/main/install_linux.sh | sudo bash``
 
 ---
