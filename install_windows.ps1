@@ -1,3 +1,5 @@
+
+
 param(
     [string]$InstallDir = "C:\kev_monitor",
     [switch]$Uninstall
@@ -6,7 +8,8 @@ param(
 $ServiceName  = "kev_monitor"
 $DisplayName  = "CISA KEV Catalog Monitor"
 $Description  = "Monitors the CISA KEV catalog for changes and sends desktop notifications."
-$GitHubRepo   = "quantumcore/kev_monitor"
+$Version      = "V.1"
+$BinaryUrl    = "https://github.com/quantumcore/kev_monitor/releases/download/V.1/kev_monitor-windows-x86_64.exe"
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -31,28 +34,6 @@ function Download-File {
     } catch {
         Write-Fail "Download failed: $_"
     }
-}
-
-function Get-LatestRelease {
-    Write-Step "Querying GitHub for the latest release..."
-    try {
-        $rel = Invoke-RestMethod `
-            -Uri "https://api.github.com/repos/$GitHubRepo/releases/latest" `
-            -UseBasicParsing `
-            -Headers @{ "User-Agent" = "kev_monitor-installer" }
-    } catch {
-        Write-Fail "Could not reach GitHub API: $_"
-    }
-    return $rel
-}
-
-function Get-AssetUrl {
-    param($Release, [string]$Pattern)
-    $asset = $Release.assets | Where-Object { $_.name -like $Pattern } | Select-Object -First 1
-    if (-not $asset) {
-        Write-Fail "No asset matching '$Pattern' found in release $($Release.tag_name)."
-    }
-    return $asset.browser_download_url
 }
 
 function Remove-Service-If-Exists {
@@ -97,18 +78,11 @@ if ($Uninstall) {
 
 Ensure-Admin
 
-# 1. Resolve latest release from GitHub
-$release = Get-LatestRelease
-$version = $release.tag_name
-Write-Ok "Latest release: $version"
-
-# 2. Resolve asset URLs
-#    Required release asset:  kev_monitor-windows-x86_64.exe
-#    Optional release asset:  settings.ini
-$binaryUrl = Get-AssetUrl $release "kev_monitor*windows*x86_64*.exe"
-$configUrl = ($release.assets |
-              Where-Object { $_.name -eq "settings.ini" } |
-              Select-Object -First 1)?.browser_download_url
+# 1. Release info
+$version   = $Version
+$binaryUrl = $BinaryUrl
+$configUrl = $null
+Write-Ok "Release: $version"
 
 # 3. Create install directory
 Write-Step "Creating install directory: $InstallDir"
@@ -182,8 +156,11 @@ Write-Ok "Service registered."
 
 # 9. Start the service
 Write-Step "Starting service..."
-Start-Service -Name $ServiceName
-if ($LASTEXITCODE -ne 0) { Write-Fail "Service failed to start. Check $InstallDir\kev_monitor_err.log" }
+try {
+    Start-Service -Name $ServiceName -ErrorAction Stop
+} catch {
+    Write-Fail "Service failed to start: $_"
+}
 
 # Verify
 $svc = Get-Service -Name $ServiceName
