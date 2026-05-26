@@ -1,0 +1,17 @@
+reports/
+# Rust build output
+/target/
+
+# Cargo registry / lock (optional keep lockfile)
+**/*.rs.bk
+
+# IDEs
+.vscode/
+.idea/
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log

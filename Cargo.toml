@@ -1,0 +1,30 @@
+[package]
+name = "kev_monitor"
+version = "0.1.0"
+edition = "2021"
+authors = ["@quantumcore"]
+
+[[bin]]
+name = "kev_monitor"
+path = "src/main.rs"
+
+[dependencies]
+ureq = { version = "=2.9.7", features = ["tls"] }
+sha1 = "0.10"
+hex = "0.4"
+configparser = "3"
+rusqlite = { version = "0.31", features = ["bundled"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+chrono = { version = "=0.4.38", features = ["clock"] }
+
+# Pin transitive deps that break on Cargo 1.75
+url = "=2.4.1"
+idna = "=0.5.0"
+
+[profile.release]
+opt-level    = 3
+strip        = "symbols"
+lto          = true
+codegen-units = 1
+panic        = "abort"
