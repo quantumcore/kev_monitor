@@ -4,6 +4,8 @@ A lightweight background service written in Rust that watches the [CISA Known Ex
 
 Built as an extension of [Zeus Threat Intelligence](https://code-9.io/zeus.php) pipeline for Automated KEV testing against a software inventory, refactored into a standalone portable utility.
 
+![img](https://github.com/quantumcore/kev_monitor/blob/main/kev.png?raw=true)
+
 ### Install
 
 Windows (Run in Powershell):
