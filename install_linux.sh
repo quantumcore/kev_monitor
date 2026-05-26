@@ -57,7 +57,7 @@ trap 'rm -rf "$TMPDIR"' EXIT
 
 BINARY_TMP="$TMPDIR/kev_monitor"
 
-step "Downloading binary ($ARCH)..."
+step "Downloading binary..."
 if command -v curl &>/dev/null; then
     curl -fsSL -o "$BINARY_TMP" "$BINARY_URL"
 else
